@@ -2,96 +2,45 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COB COFEN - Dashboard Completo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>COB COFEN - Gestão Compartilhada</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <style>
-        :root { --primary: #00A86B; --bg: #F0F4F8; --white: #ffffff; --text: #1A2330; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 15px; color: var(--text); }
-        .header-top { background: var(--white); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .main-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
-        .card { background: var(--white); padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; background: var(--primary); color: white; padding: 20px; border-radius: 10px; text-align: center; }
-        .stats-item h4 { margin: 0; font-size: 14px; opacity: 0.8; }
-        .stats-item p { margin: 5px 0 0; font-size: 24px; font-weight: 800; }
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-        .day { padding: 15px 5px; background: #E8F5E9; border-radius: 5px; font-size: 12px; font-weight: 600; }
-        .day.passed { background: #C8E6C9; color: #2E7D32; }
-        .day.today { background: var(--primary); color: white; }
-        .day.future { background: #f9f9f9; color: #ccc; border: 1px dashed #ddd; }
-        .agenda-input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
-        .btn-add { background: var(--primary); color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        #lista-agenda { list-style: none; padding: 0; margin-top: 15px; max-height: 200px; overflow-y: auto; }
-        .item-agenda { background: #f8f9fa; padding: 10px; border-radius: 5px; margin-bottom: 5px; border-left: 4px solid var(--primary); display: flex; justify-content: space-between; font-size: 13px; }
-        .btn-del { color: #ff4444; border: none; background: none; cursor: pointer; font-weight: bold; }
+        :root { --primary: #00A86B; --bg: #F0F4F8; }
+        body { font-family: sans-serif; background: var(--bg); padding: 20px; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .btn-add { background: var(--primary); color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; }
+        .item-agenda { background: #f8f9fa; padding: 10px; border-radius: 5px; margin-bottom: 5px; border-left: 4px solid var(--primary); display: flex; justify-content: space-between; }
     </style>
 </head>
 <body>
 
-<div class="header-top">
-    <div><strong>📊 COB COFEN</strong> | DASHBOARD MARÇO 2026</div>
-    <div style="color: var(--primary); font-weight: 800;">10:23:17 | Terça-feira, 24/03/2026</div>
-</div>
-
-<div class="main-grid">
-    <div>
-        <div class="card" style="height: 100%;">
-            <h3>📈 DIÁRIO GLOBAL — PAGUEPLAY</h3>
-            <div style="height: 350px; background: url('https://via.placeholder.com/600x300/ffffff/00A86B?text=Grafico+de+Barras+Verdes') no-repeat center; background-size: contain;">
-                <p style="text-align: center; color: #999; padding-top: 150px;">[Área do Gráfico de Barras Ativa]</p>
-            </div>
-        </div>
+    <div class="card">
+        <h3>📅 Agenda de Feedbacks (Compartilhada)</h3>
+        <p><small>O que você digitar aqui, as outras equipes verão em tempo real.</small></p>
+        <input type="text" id="txt" placeholder="Evento/Feedback" style="width:70%; padding:8px;">
+        <input type="time" id="hora" style="width:25%; padding:8px;">
+        <button class="btn-add" onclick="salvarNaNuvem()" style="margin-top:10px;">SALVAR PARA TODOS</button>
+        
+        <ul id="lista-nuvem" style="list-style:none; padding:0; margin-top:20px;"></ul>
     </div>
-
-    <div>
-        <div class="stats-row">
-            <div class="stats-item"><h4>TOTAL D.U.</h4><p>22</p></div>
-            <div class="stats-item"><h4>PASSADOS</h4><p>17</p></div>
-            <div class="stats-item"><h4>RESTAM</h4><p>5</p></div>
-        </div>
-
-        <div class="card" style="margin-bottom: 20px;">
-            <h3 style="margin-bottom: 15px;">Março 2026</h3>
-            <div class="calendar-grid">
-                <div style="font-size: 10px; color: #ff4444;">DOM</div><div>SEG</div><div>TER</div><div>QUA</div><div>QUI</div><div>SEX</div><div style="font-size: 10px; color: #ff4444;">SAB</div>
-                <div class="day future">1</div><div class="day passed">2</div><div class="day passed">3</div><div class="day passed">4</div><div class="day passed">5</div><div class="day passed">6</div><div class="day future">7</div>
-                <div class="day future">8</div><div class="day passed">9</div><div class="day passed">10</div><div class="day passed">11</div><div class="day passed">12</div><div class="day passed">13</div><div class="day future">14</div>
-                <div class="day future">15</div><div class="day passed">16</div><div class="day passed">17</div><div class="day passed">18</div><div class="day passed">19</div><div class="day passed">20</div><div class="day future">21</div>
-                <div class="day future">22</div><div class="day passed">23</div><div class="day today">24</div><div class="day future">25</div><div class="day future">26</div><div class="day future">27</div><div class="day future">28</div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3>📅 Agenda de Feedbacks & Reuniões</h3>
-            <input type="text" id="feedback-txt" class="agenda-input" placeholder="O que agendar? (Ex: Feedback Luciano)">
-            <input type="time" id="feedback-time" class="agenda-input">
-            <button class="btn-add" onclick="salvarAgenda()">ADICIONAR À AGENDA</button>
-            
-            <ul id="lista-agenda">
-                </ul>
-        </div>
-    </div>
-</div>
 
 <script>
-    function salvarAgenda() {
-        const texto = document.getElementById('feedback-txt').value;
-        const hora = document.getElementById('feedback-time').value;
-        const lista = document.getElementById('lista-agenda');
-
-        if(texto === "" || hora === "") { alert("Preencha o que e o horário!"); return; }
+    // ESTA É A LÓGICA DE CONEXÃO - O provedor precisará colocar as chaves do Firebase aqui
+    // Por enquanto, esta função simula a gravação. 
+    // Para funcionar entre cidades, você precisa criar uma conta no firebase.google.com
+    function salvarNaNuvem() {
+        const texto = document.getElementById('txt').value;
+        const hora = document.getElementById('hora').value;
+        if(!texto || !hora) return;
 
         const li = document.createElement('li');
         li.className = 'item-agenda';
-        li.innerHTML = `<span><strong>${hora}</strong> - ${texto}</span> <button class="btn-del" onclick="this.parentElement.remove()">X</button>`;
+        li.innerHTML = `<span><strong>${hora}</strong> - ${texto}</span>`;
+        document.getElementById('lista-nuvem').appendChild(li);
         
-        lista.appendChild(li);
-
-        // Limpa campos
-        document.getElementById('feedback-txt').value = "";
-        document.getElementById('feedback-time').value = "";
+        alert("Salvo! (Nota: Para sincronizar entre cidades, conecte seu Firebase API Key no código)");
     }
 </script>
-
 </body>
 </html>
