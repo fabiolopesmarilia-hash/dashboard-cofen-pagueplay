@@ -2,90 +2,96 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>🏆 DASHBOARD COFEN | Pague Play</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COB COFEN - Dashboard Completo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #00A86B; --secondary: #1A2330; --bg: #F8FAFB;
-            --white: #ffffff; --warn: #F59E0B; --danger: #EF4444;
-        }
-        body { font-family: 'Nunito', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: var(--secondary); }
-        .container { max-width: 900px; margin: auto; }
-        .header { text-align: center; margin-bottom: 30px; background: var(--primary); color: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-        .card { background: var(--white); padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        h2, h3 { margin-top: 0; color: var(--primary); }
-        .big-number { font-size: 24px; font-weight: 900; margin: 10px 0; }
-        .status-ok { color: var(--primary); }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { text-align: left; padding: 10px; border-bottom: 1px solid #eee; }
-        .badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
-        .badge-pm { background: var(--warn); color: white; }
-        .badge-ok { background: var(--primary); color: white; }
+        :root { --primary: #00A86B; --bg: #F0F4F8; --white: #ffffff; --text: #1A2330; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; padding: 15px; color: var(--text); }
+        .header-top { background: var(--white); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-radius: 10px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .main-grid { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px; }
+        .card { background: var(--white); padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; background: var(--primary); color: white; padding: 20px; border-radius: 10px; text-align: center; }
+        .stats-item h4 { margin: 0; font-size: 14px; opacity: 0.8; }
+        .stats-item p { margin: 5px 0 0; font-size: 24px; font-weight: 800; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
+        .day { padding: 15px 5px; background: #E8F5E9; border-radius: 5px; font-size: 12px; font-weight: 600; }
+        .day.passed { background: #C8E6C9; color: #2E7D32; }
+        .day.today { background: var(--primary); color: white; }
+        .day.future { background: #f9f9f9; color: #ccc; border: 1px dashed #ddd; }
+        .agenda-input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        .btn-add { background: var(--primary); color: white; border: none; padding: 10px; width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        #lista-agenda { list-style: none; padding: 0; margin-top: 15px; max-height: 200px; overflow-y: auto; }
+        .item-agenda { background: #f8f9fa; padding: 10px; border-radius: 5px; margin-bottom: 5px; border-left: 4px solid var(--primary); display: flex; justify-content: space-between; font-size: 13px; }
+        .btn-del { color: #ff4444; border: none; background: none; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>PROJETO COFEN - MARÇO 2026</h1>
-        <p>Meta Global: R$ 600.000,00 | Dias Restantes: 7</p>
-    </div>
+<div class="header-top">
+    <div><strong>📊 COB COFEN</strong> | DASHBOARD MARÇO 2026</div>
+    <div style="color: var(--primary); font-weight: 800;">10:23:17 | Terça-feira, 24/03/2026</div>
+</div>
 
-    <div class="grid">
-        <div class="card">
-            <h3>💰 RECEBIMENTO (REC)</h3>
-            <div class="big-number status-ok">R$ 453.179,23</div>
-            <p>Falta para 600k: <strong>R$ 146.820,77</strong></p>
-        </div>
-        <div class="card">
-            <h3>📈 HONORÁRIOS (HO)</h3>
-            <div class="big-number" style="color: #3B82F6;">R$ 107.210,19</div>
-            <p>Potencial (HO x 4): <strong>R$ 428.840,76</strong></p>
+<div class="main-grid">
+    <div>
+        <div class="card" style="height: 100%;">
+            <h3>📈 DIÁRIO GLOBAL — PAGUEPLAY</h3>
+            <div style="height: 350px; background: url('https://via.placeholder.com/600x300/ffffff/00A86B?text=Grafico+de+Barras+Verdes') no-repeat center; background-size: contain;">
+                <p style="text-align: center; color: #999; padding-top: 150px;">[Área do Gráfico de Barras Ativa]</p>
+            </div>
         </div>
     </div>
 
-    <div class="card" style="margin-bottom: 20px;">
-        <h3>🚀 ACELERAÇÃO SEMANAL (POR EQUIPE)</h3>
-        <p>Meta diária para liquidar os 600k até sexta-feira:</p>
-        <table>
-            <thead>
-                <tr>
-                    <th>Líder</th>
-                    <th>Meta Diária</th>
-                    <th>Meta Semanal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>Brenda</td><td>R$ 9.176,31</td><td>R$ 36.705,24</td></tr>
-                <tr><td>Stephanie</td><td>R$ 9.176,31</td><td>R$ 36.705,24</td></tr>
-                <tr><td>Bruna</td><td>R$ 9.176,31</td><td>R$ 36.705,24</td></tr>
-                <tr><td>Luciano</td><td>R$ 9.176,31</td><td>R$ 36.705,24</td></tr>
-            </tbody>
-        </table>
-    </div>
+    <div>
+        <div class="stats-row">
+            <div class="stats-item"><h4>TOTAL D.U.</h4><p>22</p></div>
+            <div class="stats-item"><h4>PASSADOS</h4><p>17</p></div>
+            <div class="stats-item"><h4>RESTAM</h4><p>5</p></div>
+        </div>
 
-    <div class="card">
-        <h3>👥 GESTÃO DE EQUIPE (41 OPERADORES)</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Supervisor</th>
-                    <th>Headcount</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>Brenda</td><td>11</td><td>8 OK / 3 Substituição</td></tr>
-                <tr><td>Stephanie</td><td>12</td><td>8 OK / 4 Substituição</td></tr>
-                <tr><td>Bruna</td><td>9</td><td>9 OK <span class="badge badge-ok">META BATIDA</span></td></tr>
-                <tr><td>Luciano</td><td>9</td><td>8 OK / 1 Substituição</td></tr>
-            </tbody>
-        </table>
-        <p style="margin-top: 15px; font-size: 14px;">Total em Plano de Melhoria: <strong style="color:var(--warn)">17 Operadores</strong></p>
+        <div class="card" style="margin-bottom: 20px;">
+            <h3 style="margin-bottom: 15px;">Março 2026</h3>
+            <div class="calendar-grid">
+                <div style="font-size: 10px; color: #ff4444;">DOM</div><div>SEG</div><div>TER</div><div>QUA</div><div>QUI</div><div>SEX</div><div style="font-size: 10px; color: #ff4444;">SAB</div>
+                <div class="day future">1</div><div class="day passed">2</div><div class="day passed">3</div><div class="day passed">4</div><div class="day passed">5</div><div class="day passed">6</div><div class="day future">7</div>
+                <div class="day future">8</div><div class="day passed">9</div><div class="day passed">10</div><div class="day passed">11</div><div class="day passed">12</div><div class="day passed">13</div><div class="day future">14</div>
+                <div class="day future">15</div><div class="day passed">16</div><div class="day passed">17</div><div class="day passed">18</div><div class="day passed">19</div><div class="day passed">20</div><div class="day future">21</div>
+                <div class="day future">22</div><div class="day passed">23</div><div class="day today">24</div><div class="day future">25</div><div class="day future">26</div><div class="day future">27</div><div class="day future">28</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📅 Agenda de Feedbacks & Reuniões</h3>
+            <input type="text" id="feedback-txt" class="agenda-input" placeholder="O que agendar? (Ex: Feedback Luciano)">
+            <input type="time" id="feedback-time" class="agenda-input">
+            <button class="btn-add" onclick="salvarAgenda()">ADICIONAR À AGENDA</button>
+            
+            <ul id="lista-agenda">
+                </ul>
+        </div>
     </div>
 </div>
+
+<script>
+    function salvarAgenda() {
+        const texto = document.getElementById('feedback-txt').value;
+        const hora = document.getElementById('feedback-time').value;
+        const lista = document.getElementById('lista-agenda');
+
+        if(texto === "" || hora === "") { alert("Preencha o que e o horário!"); return; }
+
+        const li = document.createElement('li');
+        li.className = 'item-agenda';
+        li.innerHTML = `<span><strong>${hora}</strong> - ${texto}</span> <button class="btn-del" onclick="this.parentElement.remove()">X</button>`;
+        
+        lista.appendChild(li);
+
+        // Limpa campos
+        document.getElementById('feedback-txt').value = "";
+        document.getElementById('feedback-time').value = "";
+    }
+</script>
 
 </body>
 </html>
