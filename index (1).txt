@@ -2,44 +2,88 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>COB COFEN - Gestão em Tempo Real</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COB COFEN - Gestão Online</title>
+    
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+
     <style>
         :root { --primary: #00A86B; --bg: #F0F4F8; }
-        body { font-family: sans-serif; background: var(--bg); padding: 20px; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-left: 5px solid var(--primary); }
-        .btn-add { background: var(--primary); color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        .item-agenda { background: #f8f9fa; padding: 10px; border-radius: 5px; margin-top: 10px; border-left: 4px solid var(--primary); display: flex; justify-content: space-between; }
-        input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); padding: 20px; color: #333; }
+        .card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-left: 6px solid var(--primary); max-width: 500px; margin: auto; }
+        h2 { color: var(--primary); margin-top: 0; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        .btn-add { background: var(--primary); color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        .btn-add:hover { background: #008f5a; }
+        .item-agenda { background: #fdfdfd; padding: 12px; border-radius: 8px; margin-top: 10px; border: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
+
     <div class="card">
-        <h2>📅 Agenda Compartilhada (PaguePlay)</h2>
-        <p><small>Teste de Sincronização entre Cidades</small></p>
-        <input type="text" id="evento" placeholder="Ex: Feedback Brenda">
+        <h2>📅 Agenda de Feedbacks</h2>
+        <p style="font-size: 14px; color: #666;">O que você digitar aqui aparece para todos os líderes em tempo real.</p>
+        
+        <input type="text" id="evento" placeholder="Ex: Feedback Luciano - Equipe 1">
         <input type="time" id="hora">
-        <button class="btn-add" onclick="salvarEvento()">SALVAR PARA TODOS</button>
-        <ul id="lista-eventos" style="list-style:none; padding:0;"></ul>
+        <button class="btn-add" onclick="salvarEvento()">AGENDAR AGORA</button>
+
+        <hr style="margin: 25px 0; border: 0; border-top: 1px solid #eee;">
+        
+        <div id="lista-eventos">
+            </div>
     </div>
 
 <script>
-    // ESTA CONFIGURAÇÃO PRECISA SER A SUA (Crie no console.firebase.google.com)
-    // Por enquanto, o código abaixo apenas simula localmente até você colocar sua API Key
+    // Suas chaves que você acabou de me mandar!
+    const firebaseConfig = {
+        apiKey: "AIzaSyBMTACDGFs6C6imdOUewRsbYex3o0PLXEA",
+        authDomain: "pagueplay-e30df.firebaseapp.com",
+        projectId: "pagueplay-e30df",
+        databaseURL: "https://pagueplay-e30df-default-rtdb.firebaseio.com", // Adicionei o link do banco aqui
+        storageBucket: "pagueplay-e30df.firebasestorage.app",
+        messagingSenderId: "965902865447",
+        appId: "1:965902865447:web:a78ddeeec26f736cd2ea02"
+    };
+
+    // Inicializando a conexão
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Função para enviar para a nuvem
     function salvarEvento() {
         const txt = document.getElementById('evento').value;
         const hr = document.getElementById('hora').value;
-        if(!txt || !hr) return alert("Preencha tudo!");
-
-        const lista = document.getElementById('lista-eventos');
-        const li = document.createElement('li');
-        li.className = 'item-agenda';
-        li.innerHTML = `<span><strong>${hr}</strong> - ${txt}</span>`;
-        lista.appendChild(li);
         
-        alert("Agendado! Para a Brenda ver em outra cidade, precisamos configurar seu Firebase pessoal.");
+        if(!txt || !hr) {
+            alert("Fábio, preencha o texto e a hora antes de salvar!");
+            return;
+        }
+
+        database.ref('agenda_cofen').push({
+            texto: txt,
+            hora: hr
+        });
+
+        document.getElementById('evento').value = "";
+        document.getElementById('hora').value = "";
     }
+
+    // Função que "escuta" a nuvem e atualiza a tela de todo mundo
+    database.ref('agenda_cofen').on('value', (snapshot) => {
+        const lista = document.getElementById('lista-eventos');
+        lista.innerHTML = "";
+        snapshot.forEach((item) => {
+            const data = item.val();
+            const li = document.createElement('div');
+            li.className = 'item-agenda';
+            li.innerHTML = `<span><strong>${data.hora}</strong> - ${data.texto}</span>`;
+            lista.prepend(li); // O mais recente aparece no topo
+        });
+    });
 </script>
+
 </body>
 </html>
